@@ -6,11 +6,12 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { LoginTabs } from "@/components/LoginTabs";
 
 // Schemas
 const loginSchema = z.object({
@@ -20,7 +21,7 @@ const loginSchema = z.object({
 
 const signupSchema = z.object({
   nome: z.string().min(2, "Nome muito curto"),
-  celular: z.string().min(8, "Celular inválido"),
+  celular: z.string().min(11, "Celular inválido"),
   email: z.string().email("Email inválido"),
   senha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
 });
@@ -31,7 +32,23 @@ type SignupData = z.infer<typeof signupSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [hasTabChanged, setHasTabChanged] = useState(false);
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
+
+  const handleTabChange = (value: boolean) => {
+    if (isSignUp !== value) {
+      setIsSignUp(value);
+      setHasTabChanged(true);
+      setTimeout(() => {}, 400);
+    }
+  };
+
+  useEffect(() => {
+    if (hasTabChanged) {
+      const reset = setTimeout(() => setHasTabChanged(false), 500);
+      return () => clearTimeout(reset);
+    }
+  }, [hasTabChanged]);
 
   // Formulários separados
   const loginForm = useForm<LoginData>({
@@ -68,7 +85,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center mt-20 px-4">
+    <div id="loginPage" className="flex flex-col items-center">
+      <LoginTabs activeTab={isSignUp} onTabChange={handleTabChange} />
       <h1 className="text-2xl font-bold mb-4">
         {isSignUp ? "Criar Conta" : "Entrar"}
       </h1>
@@ -168,20 +186,6 @@ export default function LoginPage() {
           )}
         </form>
       )}
-
-      {/* Botão de alternar entre login/cadastro */}
-      <Button
-        variant="ghost"
-        onClick={() => {
-          setFirebaseError(null);
-          setIsSignUp(!isSignUp);
-        }}
-        className="mt-4 text-sm text-blue-600 hover:underline"
-      >
-        {isSignUp
-          ? "Já tem uma conta? Entrar"
-          : "Ainda não tem conta? Cadastrar"}
-      </Button>
     </div>
   );
 }
