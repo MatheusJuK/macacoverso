@@ -14,11 +14,9 @@ export default function SystemLayout({
 
   useEffect(() => {
     if (!loading && !user) {
-      /*
-      router.push("/login"); 
-      */
+      router.push("/login");
     }
-  }, [user, loading]);
+  }, [user, loading, router]);
 
   if (loading) return <p>Carregando...</p>;
   return <>{children}</>;
