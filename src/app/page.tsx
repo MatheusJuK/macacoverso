@@ -1,4 +1,6 @@
 import MacacoCarousel from "@/components/macacoCarousel";
+import { signOutUser } from "@/lib/firebaseClient";
+import { Button } from "@/components/ui/button";
 
 async function getMacacos() {
   const res = await fetch(

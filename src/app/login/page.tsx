@@ -1,26 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { auth, googleProvider } from "@/lib/firebaseClient";
+import { auth, googleProvider, db } from "@/lib/firebaseClient";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
-  type UserCredential,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { LoginTabs } from "@/components/LoginTabs";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { doc, setDoc } from "firebase/firestore";
+import { z } from "zod";
+
+const signupSchema = z.object({
+  name: z.string().min(1, "Nome é obrigatório"),
+  phone: z.string().min(1, "Telefone é obrigatório"),
+  email: z.string().email("Email inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+});
+
+const signinSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+});
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [telephone, setTelephone] = useState("");
+  const [phone, setPhone] = useState("");
   const router = useRouter();
 
   const handleTabChange = (tab: string) => {
@@ -30,28 +43,43 @@ export default function LoginPage() {
 
   const handleAuth = async () => {
     try {
-      let userCredential: UserCredential;
-
-      if (activeTab === "signin") {
-        userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-      } else {
-        userCredential = await createUserWithEmailAndPassword(
+      if (activeTab === "signup") {
+        signupSchema.parse({ name, phone, email, password });
+        const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
         await updateProfile(userCredential.user, { displayName: name });
-      }
 
-      const token = await userCredential.user.getIdToken();
-      document.cookie = `token=${token}; path=/`;
-      router.push("/");
+        const userDocRef = doc(db, "users", userCredential.user.uid);
+        await setDoc(userDocRef, {
+          uid: userCredential.user.uid,
+          email,
+          name: name,
+          phone: phone,
+          criadoEm: new Date().toISOString(),
+        });
+
+        const token = await userCredential.user.getIdToken();
+        document.cookie = `token=${token}; path=/`;
+        router.push("/");
+      } else {
+        signinSchema.parse({ email, password });
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const token = await userCredential.user.getIdToken();
+        document.cookie = `token=${token}; path=/`;
+        router.push("/");
+      }
     } catch (err) {
-      if (err instanceof Error) {
+      if (err instanceof z.ZodError) {
+        alert(err.issues[0].message);
+      } else if (err instanceof Error) {
         alert(`Erro: ${err.message}`);
       }
     }
@@ -96,8 +124,8 @@ export default function LoginPage() {
                 type="tel"
                 placeholder="Telefone"
                 className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white"
-                value={telephone}
-                onChange={(e) => setTelephone(e.target.value)}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
           )}
