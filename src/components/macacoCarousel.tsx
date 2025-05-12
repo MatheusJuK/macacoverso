@@ -1,42 +1,30 @@
 "use client";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { useEffect, useState } from "react";
 import MacacoCard from "./macacoCard";
 
 type Macaco = {
   id: string;
   nome: string;
   especie: string;
-  idade: number;
-  descricao: string;
-  fotoUrl: string;
+  historia: string;
+  foto: string;
+  disponivel: boolean;
 };
 
-export default function MacacoCarousel({ macacos }: { macacos: Macaco[] }) {
+export default function MacacoCarousel() {
+  const [macacos, setMacacos] = useState<Macaco[]>([]);
+
+  useEffect(() => {
+    fetch("/api/macacos")
+      .then((res) => res.json())
+      .then((data) => setMacacos(data));
+  }, []);
+
   return (
-    <Swiper
-      modules={[Navigation, Pagination, Autoplay]}
-      spaceBetween={30}
-      slidesPerView={1}
-      navigation
-      pagination={{ clickable: true }}
-      autoplay={{ delay: 3000 }}
-      loop
-      breakpoints={{
-        640: { slidesPerView: 1 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-      }}
-    >
+    <div className="flex justify-center gap-8 py-10 overflow-x-auto">
       {macacos.map((macaco) => (
-        <SwiperSlide key={macaco.id}>
-          <MacacoCard macaco={macaco} />
-        </SwiperSlide>
+        <MacacoCard key={macaco.id} macaco={macaco} />
       ))}
-    </Swiper>
+    </div>
   );
 }

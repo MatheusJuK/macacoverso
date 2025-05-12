@@ -1,31 +1,18 @@
+"use client";
 import MacacoCarousel from "@/components/macacoCarousel";
-import { signOutUser } from "@/lib/firebaseClient";
-import { Button } from "@/components/ui/button";
 
-async function getMacacos() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL || ""}/api/macacos`,
-    {
-      cache: "no-store",
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Falha ao buscar os macacos");
-  }
-
-  return res.json();
-}
-
-export default async function Home() {
-  const macacos = await getMacacos();
-
+export default function Home() {
   return (
-    <main className="min-h-screen bg-[#A97449] p-8">
-      <h1 className="text-3xl font-bold text-center mb-8">
-        🐒 Bem-vindo ao Macacoverso!
-      </h1>
-      <MacacoCarousel macacos={macacos} />
-    </main>
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: 'url("/bg-home.jpg")' }}
+    >
+      <div className="backdrop-blur-sm bg-black bg-opacity-40 min-h-screen p-6">
+        <h1 className="text-4xl text-white text-center font-bold mb-10 drop-shadow-md">
+          Conheça os Macacos do Macacoverso 🐒
+        </h1>
+        <MacacoCarousel />
+      </div>
+    </div>
   );
 }
