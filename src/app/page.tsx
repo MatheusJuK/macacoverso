@@ -19,7 +19,7 @@ export default async function Home() {
   const macacos = await getMacacos();
 
   return (
-    <main className="min-h-screen bg-green-50 p-8">
+    <main className="min-h-screen bg-[#A97449] p-8">
       <h1 className="text-3xl font-bold text-center mb-8">
         🐒 Bem-vindo ao Macacoverso!
       </h1>

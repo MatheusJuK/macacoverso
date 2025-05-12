@@ -10,20 +10,22 @@ import {
   type UserCredential,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { ProjectTabs } from "@/components/ProjectTabs";
+import { LoginTabs } from "@/components/LoginTabs";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [telephone, setTelephone] = useState("");
   const router = useRouter();
 
   const handleTabChange = (tab: string) => {
-    if (tab === "solutions") setActiveTab("signup");
-    else if (tab === "articles") setActiveTab("signin");
+    if (tab === "signup") setActiveTab("signup");
+    else if (tab === "signin") setActiveTab("signin");
   };
 
   const handleAuth = async () => {
@@ -70,39 +72,47 @@ export default function LoginPage() {
 
   return (
     <div
-      className="flex min-h-screen items-center justify-center bg-cover bg-center px-4"
+      className="flex flex-col w-full gap-8 min-h-screen items-center justify-center bg-cover bg-center px-4"
       style={{ backgroundImage: "url(/macacoversoLogin.png)" }}
     >
-      <div className="rounded-2xl bg-[#A97449] bg-opacity-90 p-8 shadow-2xl w-full max-w-md">
-        {/* Tabs */}
-        <ProjectTabs
-          activeTab={activeTab === "signup" ? "solutions" : "articles"}
-          onTabChange={handleTabChange}
-        />
-
+      {/* Tabs */}
+      <LoginTabs
+        activeTab={activeTab === "signup" ? "signup" : "signin"}
+        onTabChange={handleTabChange}
+      />
+      <div className="rounded-2xl bg-[#A97449] p-8 w-full max-w-sm border-black border-2">
         {/* Form */}
         <div className="mt-6 space-y-4">
           {activeTab === "signup" && (
-            <input
-              type="text"
-              placeholder="Nome"
-              className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-green-300"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <div className="flex flex-col gap-4">
+              <Input
+                type="text"
+                placeholder="Nome"
+                className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                type="tel"
+                placeholder="Telefone"
+                className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white"
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
+              />
+            </div>
           )}
 
-          <input
+          <Input
             type="email"
             placeholder="Email"
-            className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
+          <Input
             type="password"
             placeholder="Senha"
-            className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="w-full rounded-xl bg-[#5D3A1A] p-3 text-white"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
