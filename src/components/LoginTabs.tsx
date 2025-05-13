@@ -42,7 +42,7 @@ export function LoginTabs({ activeTab, onTabChange }: LoginTabsProps) {
               : "text-gray-200 hover:text-gray-900"
           }`}
         >
-          SignIn
+          Login
         </button>
       </div>
     </div>
