@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebaseAdmin";
 
-const protectedRoutes = ["/adocao", "/pagamento"];
+const protectedRoutes = ["/adoption", "/donations", "/visits"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -24,5 +24,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/adocao/:path*", "/pagamento/:path*"],
+  matcher: ["/adoption/:path*", "/donations/:path*", "/visits/:path*"],
 };
