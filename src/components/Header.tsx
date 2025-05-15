@@ -7,13 +7,13 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
-    { name: "Macacos", href: "#macacos" },
-    { name: "Missão", href: "#missao" },
-    { name: "Adoção", href: "#adocao" },
-    { name: "Visitas", href: "#visitas" },
-    { name: "Doação", href: "#doacao" },
-    { name: "Contato", href: "#contato" },
-    { name: "Curiosidades", href: "#curiosidades" },
+    { name: "Macacos", href: "/" },
+    { name: "Missão", href: "/mission" },
+    { name: "Adoção", href: "/adoption" },
+    { name: "Visitas", href: "/visits" },
+    { name: "Doação", href: "/donations" },
+    { name: "Contato", href: "/contact" },
+    { name: "Curiosidades", href: "/curiosities" },
   ];
 
   return (
