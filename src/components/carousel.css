@@ -1,6 +1,6 @@
 .carousel-container {
-  perspective: 2500px;
-  perspective-origin: 50% 50%;
+  perspective: 2000px;
+  perspective-origin: 50% 60%;
   overflow: hidden;
 }
 
@@ -14,21 +14,31 @@
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
+  width: 100%;
   position: relative;
 }
 
 .carousel-item {
   position: absolute;
-  width: 320px;
   transform-style: preserve-3d;
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   top: 50%;
   left: 50%;
   transform-origin: center;
   backface-visibility: hidden;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transform: translate(-50%, -50%);
+  width: clamp(250px, 80vw, 400px); /* Responsivo */
+  max-height: 80%;
 }
 
-.carousel-item.active {
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+@media (max-width: 768px) {
+  .carousel-item {
+    width: 90vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .carousel-item {
+    width: 350px;
+  }
 }
