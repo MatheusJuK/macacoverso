@@ -17,7 +17,7 @@ type Macaco = {
 export default function MacacoCarousel() {
   const [macacos, setMacacos] = useState<Macaco[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const radius = 1000;
+  const radius = 800;
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,80 +51,60 @@ export default function MacacoCarousel() {
   };
 
   return (
-    <div
-      className="carousel-container relative w-full mx-auto h-[600px] sm:h-[650px] md:h-[700px] px-2 sm:px-4"
-      ref={containerRef}
-    >
-      {/* Botões mobile */}
-      <div className="flex justify-between items-center mb-4 md:hidden">
-        <Button
-          onClick={handlePrev}
-          size="icon"
-          className="rounded-full bg-black/40 hover:bg-black/30 backdrop-blur-sm"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
-        <Button
-          onClick={handleNext}
-          size="icon"
-          className="rounded-full bg-black/40 hover:bg-black/30 backdrop-blur-sm"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {/* Botões desktop */}
+    <>
       <Button
         onClick={handlePrev}
-        variant="outline"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full z-50 bg-black/40 hover:bg-black/30 backdrop-blur-sm hidden md:block"
+        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full z-50 bg-black/80 hover:bg-black/20 backdrop-blur-sm px-2 xl:left-16"
       >
         <ChevronLeft className="h-6 w-6" />
       </Button>
+      <div
+        className="carousel-container relative w-[90%] max-h-[900px] h-[600px]"
+        ref={containerRef}
+      >
+        {/* Botões desktop */}
 
-      <div className="carousel relative w-full h-full">
-        <div className="carousel-items w-full h-full">
-          {macacos.map((macaco, index) => (
-            <div
-              key={macaco.id}
-              className={`carousel-item ${
-                activeIndex === index ? "active" : ""
-              }`}
-              style={getItemStyle(index)}
-            >
-              <MacacoCard macaco={macaco} isActive={activeIndex === index} />
-            </div>
-          ))}
-        </div>
+        <div className="carousel relative">
+          <div className="carousel-items max-w-[400px] min-w-[300px] mx-auto">
+            {macacos.map((macaco, index) => (
+              <div
+                key={macaco.id}
+                className={`carousel-item ${
+                  activeIndex === index ? "active" : ""
+                }`}
+                style={getItemStyle(index)}
+              >
+                <MacacoCard macaco={macaco} isActive={activeIndex === index} />
+              </div>
+            ))}
+          </div>
 
-        {/* Indicadores */}
-        <div className="absolute inset-x-1 bottom-4 flex justify-center gap-1.5 z-50 flex-wrap px-4 max-w-2xl mx-auto">
-          {macacos.map((_, index) => (
-            <Button
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-              key={index}
-              variant="outline"
-              size="icon"
-              onClick={() => setActiveIndex(index)}
-              className={`w-2 h-2 p-0 rounded-full transition-all duration-300 ${
-                index === activeIndex
-                  ? "bg-black scale-125"
-                  : "bg-black/40 hover:bg-black/70"
-              }`}
-            />
-          ))}
+          {/* Indicadores */}
+          <div className="absolute inset-x-1 bottom-4 flex justify-center gap-1.5 z-50 flex-wrap px-4 max-w-2xl mx-auto">
+            {macacos.map((_, index) => (
+              <Button
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                key={index}
+                variant="outline"
+                size="icon"
+                className={`w-4 h-4 p-0 rounded-full transition-all duration-300 ${
+                  index === activeIndex
+                    ? "bg-black scale-125"
+                    : "bg-black/40 hover:bg-black/40"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-
       <Button
         onClick={handleNext}
-        variant="outline"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full z-50 bg-black/40 hover:bg-black/30 backdrop-blur-sm hidden md:block"
+        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full z-50 bg-black/80 hover:bg-black/20 backdrop-blur-sm px-2 xl:right-16"
       >
         <ChevronRight className="h-6 w-6" />
       </Button>
-    </div>
+    </>
   );
 }

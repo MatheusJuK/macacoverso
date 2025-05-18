@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "./ui/button";
+import AdocaoSimbolicaModal from "./adoption";
 
 type Macaco = {
   id: string;
@@ -20,35 +20,27 @@ export default function MacacoCard({
   return (
     <div
       className={`
-      bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-4 
-      flex flex-col items-center w-[300px] transform -translate-x-1/2 -translate-y-1/2
-      transition-all duration-500
-      ${isActive ? "shadow-xl ring-2 ring-white/20" : ""}
+      bg-white/95 rounded-2xl  p-4 
+      flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2
+      transition-all duration-500 max-w-[300px] min-w-[
+      300px]
     `}
     >
-      <div className="relative w-[80%] h-48 rounded-xl overflow-hidden">
+      <div className="relative sm:w-[80%] h-24 w-30 sm:h-48 rounded-xl">
         <Image
           src={macaco.foto}
           alt={macaco.nome}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 320px"
           priority={isActive}
         />
       </div>
 
       <h2 className="text-xl font-bold mt-3">{macaco.nome}</h2>
-      <p className="text-gray-600 italic">{macaco.especie}</p>
-      <p className="text-sm mt-2 text-center line-clamp-2">{macaco.historia}</p>
+      <p className="text-gray-600 italic text-center">{macaco.especie}</p>
+      <p className="text-sm mt-2 text-center">{macaco.historia}</p>
 
-      {macaco.disponivel && (
-        <Button
-          variant="default"
-          className="mt-4 bg-green-600 hover:bg-green-700 text-white"
-        >
-          Adote Simbolicamente
-        </Button>
-      )}
+      <AdocaoSimbolicaModal />
     </div>
   );
 }

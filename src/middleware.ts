@@ -1,28 +1,38 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { adminAuth } from "@/lib/firebaseAdmin";
-
-const protectedRoutes = ["/adoption", "/donations", "/visits"];
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const isProtected = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
-  if (!isProtected) return NextResponse.next();
-
   const token = req.cookies.get("token")?.value;
 
-  if (!token) return NextResponse.redirect(new URL("/login", req.url));
+  const { pathname } = req.nextUrl;
 
-  try {
-    await adminAuth.verifyIdToken(token);
-    return NextResponse.next();
-  } catch {
+  const isPublic = pathname.startsWith("/login");
+
+  if (!token && !isPublic) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
+  if (token && pathname === "/login") {
+    return NextResponse.redirect(new URL("/mission", req.url));
+  }
+
+  if (token) {
+    try {
+      return NextResponse.next();
+    } catch {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/adoption/:path*", "/donations/:path*", "/visits/:path*"],
+  matcher: [
+    "/",
+    "/missao",
+    "/visitas",
+    "/doacao",
+    "/contato",
+    "/curiosidades",
+    "/login",
+  ],
 };

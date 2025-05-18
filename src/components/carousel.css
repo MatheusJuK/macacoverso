@@ -1,6 +1,6 @@
 .carousel-container {
-  perspective: 2000px;
-  perspective-origin: 50% 60%;
+  perspective: 12000px;
+  perspective-origin: 50% 50%;
   overflow: hidden;
 }
 
@@ -27,18 +27,4 @@
   transform-origin: center;
   backface-visibility: hidden;
   transform: translate(-50%, -50%);
-  width: clamp(250px, 80vw, 400px); /* Responsivo */
-  max-height: 80%;
-}
-
-@media (max-width: 768px) {
-  .carousel-item {
-    width: 90vw;
-  }
-}
-
-@media (min-width: 1200px) {
-  .carousel-item {
-    width: 350px;
-  }
 }

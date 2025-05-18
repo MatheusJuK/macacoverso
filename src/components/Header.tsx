@@ -17,7 +17,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-[#3b2f26] text-white shadow-md sticky top-0 z-50">
+    <header className="bg-[#3b2f26] text-white shadow-md absolute top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1 className="text-xl font-bold tracking-wide">Macacoverso</h1>
 
