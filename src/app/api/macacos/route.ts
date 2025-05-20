@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { getFirestore } from "firebase-admin/firestore";
 import "@/lib/firebaseAdmin"; // Inicialização do Admin
-
-const db = getFirestore();
+import { adminDb } from "@/lib/firebaseAdmin"; // Importando a instância do Firestore
 
 export async function GET() {
-  const snapshot = await db.collection("macacos").get();
+  const snapshot = await adminDb.collection("macacos").get();
   const macacos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   return NextResponse.json(macacos);
 }
