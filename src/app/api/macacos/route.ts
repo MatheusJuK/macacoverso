@@ -1,11 +1,17 @@
+export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import "@/lib/firebaseAdmin"; // Inicialização do Admin
 import { adminDb } from "@/lib/firebaseAdmin"; // Importando a instância do Firestore
 
 export async function GET() {
-  const snapshot = await adminDb.collection("macacos").get();
-  const macacos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return NextResponse.json(macacos);
+  try {
+    const snapshot = await adminDb.collection("macacos").get();
+    const macacos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return NextResponse.json(macacos);
+  } catch (error) {
+    console.error("Erro ao buscar macacos:", error);
+    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+  }
 }
 
 // export async function POST() {
