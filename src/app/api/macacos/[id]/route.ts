@@ -6,7 +6,7 @@ const db = getFirestore();
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   const { id } = await params;
   const doc = await db.collection("macacos").doc(id).get();
