@@ -1,0 +1,126 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { auth, db } from "@/lib/firebaseClient";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { Card } from "@/components/ui/card";
+
+export default function Contact() {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [sucesso, setSucesso] = useState(false);
+
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userDocRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          setNome(userData.displayName || userData.name || "");
+          setEmail(userData.email || "");
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  const webhookURL = "COLE_AQUI_A_URL_DO_SEU_WEBHOOK_DO_DISCORD";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEnviando(true);
+
+    try {
+      const payload = {
+        username: "Contato Macacoverso",
+        embeds: [
+          {
+            title: "Nova mensagem de contato",
+            fields: [
+              { name: "Nome", value: nome || "Não informado" },
+              { name: "Email", value: email || "Não informado" },
+              { name: "Mensagem", value: mensagem || "Não informado" },
+            ],
+            color: 0x00ff00,
+          },
+        ],
+      };
+
+      const response = await fetch(webhookURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar mensagem");
+      }
+      alert("Mensagem enviada com sucesso!");
+
+      setSucesso(true);
+      setNome("");
+      setEmail("");
+      setMensagem("");
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao enviar mensagem. Tente novamente.");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  return (
+    <Card className="md:max-w-2xl max-w-[80%] mx-auto mt-[10rem] p-4 bg-white shadow-md rounded-lg">
+      <h1 className="text-2xl font-bold mb-4 text-center">Contato</h1>
+      <p className="mb-6 text-center">
+        Quer falar algo para a equipe? Preencha abaixo:
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          placeholder="Seu nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+          aria-required="true"
+        />
+        <Input
+          type="email"
+          placeholder="Seu email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          aria-required="true"
+        />
+        <Textarea
+          placeholder="Sua mensagem"
+          value={mensagem}
+          onChange={(e) => setMensagem(e.target.value)}
+          rows={2}
+          required
+          className="resize-y max-h-[15rem]"
+          aria-required="true"
+        />
+        <Button
+          type="submit"
+          className="w-full disabled:opacity-50"
+          disabled={enviando}
+          aria-busy={enviando}
+        >
+          {enviando ? "Enviando..." : "Enviar"}
+        </Button>
+      </form>
+    </Card>
+  );
+}

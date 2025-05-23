@@ -2,7 +2,7 @@ export default function Mission() {
   return (
     <main className="bg-white text-gray-800">
       {/* Banner inicial */}
-      <section className="bg-[#F5F5F5] py-16 px-6 text-center mt-[30px]">
+      <section className="bg-[#F5F5F5] py-16 px-6 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4">
             Conectando Espécies, Inspirando Mudanças

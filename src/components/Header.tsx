@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation"; // Importa o hook usePathname do Next.js
 import { Menu, X } from "lucide-react"; // ou troque por ícones que preferir
 import { Button } from "./ui/button";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname(); // Obtém o caminho atual da URL
 
   const links = [
     { name: "Macacos", href: "/" },
@@ -15,8 +17,8 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-[#3b2f26] text-white shadow-md absolute top-0 z-50 w-full">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <header className="bg-[#3b2f26] text-green-400 shadow-md fixed top-0 z-50 w-full">
+      <div className="max-w-[90rem] mx-auto px-6 py-4 flex justify-between items-center">
         <h1 className="text-xl font-bold tracking-wide">Macacoverso</h1>
 
         {/* Desktop menu */}
@@ -28,7 +30,11 @@ export default function Header() {
             <a
               key={link.name}
               href={link.href}
-              className="hover:text-yellow-300 transition-colors font-medium"
+              className={
+                pathname === link.href
+                  ? "text-yellow-300"
+                  : "hover:text-yellow-300"
+              }
             >
               {link.name}
             </a>
@@ -55,7 +61,11 @@ export default function Header() {
             <a
               key={link.name}
               href={link.href}
-              className="block text-white hover:text-yellow-300 font-medium"
+              className={`block font-medium ${
+                pathname === link.href
+                  ? "text-yellow-300"
+                  : "hover:text-yellow-300"
+              }`}
               onClick={() => setMenuOpen(false)} // Fecha o menu após clique
             >
               {link.name}

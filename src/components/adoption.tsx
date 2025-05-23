@@ -16,9 +16,10 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 interface Props {
   macacoId: string;
+  onAdotar: (adotadoPor: string) => void;
 }
 
-export default function AdocaoSimbolicaModal({ macacoId }: Props) {
+export default function AdocaoSimbolicaModal({ macacoId, onAdotar }: Props) {
   const [open, setOpen] = useState(false);
 
   const [nome, setNome] = useState("");
@@ -63,6 +64,7 @@ export default function AdocaoSimbolicaModal({ macacoId }: Props) {
       }
 
       alert("Obrigado pela sua adoção simbólica!");
+      onAdotar(user ? user.displayName || nome : "");
       setOpen(false);
     } catch (err) {
       console.error(err);
@@ -73,7 +75,11 @@ export default function AdocaoSimbolicaModal({ macacoId }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)} variant="default">
+        <Button
+          onClick={() => setOpen(true)}
+          variant="default"
+          className="bg-[#977036] hover:bg-[#866129] font-bold py-2 px-4 rounded"
+        >
           Adotar simbolicamente
         </Button>
       </DialogTrigger>

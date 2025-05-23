@@ -12,6 +12,7 @@ type Macaco = {
   historia: string;
   foto: string;
   disponivel: boolean;
+  adotadoPor: string;
 };
 
 export default function MacacoCarousel() {

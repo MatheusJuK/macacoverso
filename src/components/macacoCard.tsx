@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
 import AdocaoSimbolicaModal from "./adoption";
+import { useState } from "react";
 
 type Macaco = {
   id: string;
@@ -8,6 +10,7 @@ type Macaco = {
   historia: string;
   foto: string;
   disponivel: boolean;
+  adotadoPor: string;
 };
 
 export default function MacacoCard({
@@ -17,6 +20,14 @@ export default function MacacoCard({
   macaco: Macaco;
   isActive?: boolean;
 }) {
+  const [disponivel, setDisponivel] = useState(macaco.disponivel);
+  const [adotadoPor, setAdotadoPor] = useState(macaco.adotadoPor);
+
+  const handleAdoption = (adotadoPor: string) => {
+    setDisponivel(false);
+    setAdotadoPor(adotadoPor);
+  };
+
   return (
     <div
       className={`
@@ -40,7 +51,14 @@ export default function MacacoCard({
       <h2 className="text-xl font-bold mt-3">{macaco.nome}</h2>
       <p className="text-gray-600 italic text-center">{macaco.especie}</p>
       <p className="text-sm mt-2 text-center">{macaco.historia}</p>
-      {macaco.disponivel && <AdocaoSimbolicaModal macacoId={macaco.id} />}
+      {disponivel ? (
+        <AdocaoSimbolicaModal macacoId={macaco.id} onAdotar={handleAdoption} />
+      ) : (
+        <p className="font-bold mt-2">
+          Adotado por <br />{" "}
+          <span className="text-green-600 ">{adotadoPor}</span>
+        </p>
+      )}
     </div>
   );
 }
