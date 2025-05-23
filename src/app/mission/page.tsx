@@ -1,6 +1,6 @@
 export default function Mission() {
   return (
-    <main className="bg-white text-gray-800">
+    <main className="bg-white text-gray-800 mt-[50px]">
       {/* Banner inicial */}
       <section className="bg-[#F5F5F5] py-16 px-6 text-center">
         <div className="max-w-4xl mx-auto">

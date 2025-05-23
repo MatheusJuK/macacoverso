@@ -15,7 +15,7 @@ export default function LayoutWrapper({
   return (
     <>
       {showHeader && <Header />}
-      <div className="mt-[50px]">{children}</div>
+      {children}
     </>
   );
 }
