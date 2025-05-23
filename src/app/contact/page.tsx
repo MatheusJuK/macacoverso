@@ -33,7 +33,8 @@ export default function Contact() {
     fetchUserData();
   }, [user]);
 
-  const webhookURL = "COLE_AQUI_A_URL_DO_SEU_WEBHOOK_DO_DISCORD";
+  const webhookURL =
+    "https://discord.com/api/webhooks/1375618069484797964/IXSYXb-JLiEYHMeCE71O7JzBhLYQesZ7se7j7ZV7pexGEn30Y8UdL48LpRPaz1vtYjvm";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
