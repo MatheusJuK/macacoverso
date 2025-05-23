@@ -31,6 +31,7 @@ export default function MacacoCard({
           src={macaco.foto}
           alt={macaco.nome}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover"
           priority={isActive}
         />
@@ -39,8 +40,7 @@ export default function MacacoCard({
       <h2 className="text-xl font-bold mt-3">{macaco.nome}</h2>
       <p className="text-gray-600 italic text-center">{macaco.especie}</p>
       <p className="text-sm mt-2 text-center">{macaco.historia}</p>
-
-      <AdocaoSimbolicaModal />
+      {macaco.disponivel && <AdocaoSimbolicaModal macacoId={macaco.id} />}
     </div>
   );
 }

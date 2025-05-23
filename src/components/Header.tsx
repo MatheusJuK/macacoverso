@@ -9,8 +9,6 @@ export default function Header() {
   const links = [
     { name: "Macacos", href: "/" },
     { name: "Missão", href: "/mission" },
-    { name: "Adoção", href: "/adoption" },
-    { name: "Visitas", href: "/visits" },
     { name: "Doação", href: "/donations" },
     { name: "Contato", href: "/contact" },
     { name: "Curiosidades", href: "/curiosities" },

@@ -7,13 +7,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
+  type User,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { LoginTabs } from "@/components/LoginTabs";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { z } from "zod";
 
 const signupSchema = z.object({
@@ -84,11 +85,29 @@ export default function LoginPage() {
       }
     }
   };
+  async function createUserIfNotExists(user: User) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
 
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+        createdAt: new Date().toISOString(),
+      });
+      console.log("Usuário criado no Firestore.");
+    } else {
+      console.log("Usuário já existe no Firestore.");
+    }
+  }
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const token = await result.user.getIdToken();
+      const user = result.user;
+      await createUserIfNotExists(user);
+      const token = await user.getIdToken();
       document.cookie = `token=${token}; path=/`;
       router.push("/");
     } catch (err) {
