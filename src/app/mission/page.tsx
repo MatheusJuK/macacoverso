@@ -22,7 +22,7 @@ export default function Mission() {
             <img
               src="https://i.pinimg.com/originals/28/77/d6/2877d6444d53ffcb6875a40f1b301385.jpg"
               alt="Macaco segurando cajado dourado olhando firme"
-              className="rounded-xl "
+              className="rounded-xl"
             />
           </div>
           <div>
