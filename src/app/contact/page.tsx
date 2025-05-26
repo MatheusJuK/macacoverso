@@ -82,7 +82,7 @@ export default function Contact() {
   };
 
   return (
-    <Card className="md:max-w-2xl max-w-[80%] mx-auto mt-[10rem] p-4 bg-white shadow-md rounded-lg">
+    <Card className="md:max-w-2xl max-w-[80%] mx-auto mt-[12rem] p-4 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold mb-4 text-center">Contato</h1>
       <p className="mb-6 text-center">
         Quer falar algo para a equipe? Preencha abaixo:
