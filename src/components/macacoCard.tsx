@@ -33,17 +33,16 @@ export default function MacacoCard({
       className={`
       bg-white/95 rounded-2xl  p-4 
       flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2
-      transition-all duration-500 max-w-[300px] min-w-[
-      300px]
+      transition-all duration-500 max-w-[320px] min-w-[220px] md:min-w-[260px]
     `}
     >
-      <div className="relative sm:w-[80%] h-24 w-30 sm:h-48 rounded-xl">
+      <div className="relative sm:w-[100%] h-24 w-40 sm:h-48 rounded-xl">
         <Image
           src={macaco.foto}
           alt={macaco.nome}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover"
+          className="object-cover rounded-xl object-top"
           priority={isActive}
         />
       </div>
