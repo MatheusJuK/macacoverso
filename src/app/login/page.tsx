@@ -97,9 +97,7 @@ export default function LoginPage() {
         uid: user.uid,
         createdAt: new Date().toISOString(),
       });
-      console.log("Usuário criado no Firestore.");
-    } else {
-      console.log("Usuário já existe no Firestore.");
+      console.log("Usuário criado no Firestore");
     }
   }
   const handleGoogleLogin = async () => {
