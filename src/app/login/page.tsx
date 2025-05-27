@@ -35,6 +35,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleTabChange = (tab: string) => {
@@ -43,6 +44,7 @@ export default function LoginPage() {
   };
 
   const handleAuth = async () => {
+    setIsSubmitting(true);
     try {
       if (activeTab === "signup") {
         signupSchema.parse({ name, phone, email, password });
@@ -57,13 +59,14 @@ export default function LoginPage() {
         await setDoc(userDocRef, {
           uid: userCredential.user.uid,
           email,
-          name: name,
-          phone: phone,
+          name,
+          phone,
           criadoEm: new Date().toISOString(),
         });
 
         const token = await userCredential.user.getIdToken();
         document.cookie = `token=${token}; path=/`;
+
         router.push("/");
       } else {
         signinSchema.parse({ email, password });
@@ -75,6 +78,7 @@ export default function LoginPage() {
 
         const token = await userCredential.user.getIdToken();
         document.cookie = `token=${token}; path=/`;
+
         router.push("/");
       }
     } catch (err) {
@@ -83,8 +87,11 @@ export default function LoginPage() {
       } else if (err instanceof Error) {
         alert(`Erro: ${err.message}`);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   async function createUserIfNotExists(user: User) {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
@@ -100,33 +107,34 @@ export default function LoginPage() {
       console.log("Usuário criado no Firestore");
     }
   }
+
   const handleGoogleLogin = async () => {
+    setIsSubmitting(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       await createUserIfNotExists(user);
+
       const token = await user.getIdToken();
       document.cookie = `token=${token}; path=/`;
+
       router.push("/");
     } catch (err) {
       if (err instanceof Error) {
         alert(`Erro com Google: ${err.message}`);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div
-      className="flex flex-col w-full gap-8 min-h-screen items-center justify-center bg-cover bg-center px-4"
+      className="flex flex-col w-full gap-12 min-h-screen items-center justify-center bg-cover bg-center px-4"
       style={{ backgroundImage: "url(/macacoversoLogin.png)" }}
     >
-      {/* Tabs */}
-      <LoginTabs
-        activeTab={activeTab === "signup" ? "signup" : "signin"}
-        onTabChange={handleTabChange}
-      />
-      <div className="rounded-2xl bg-[#A97449] p-8 w-full max-w-sm border-black border-2">
-        {/* Form */}
+      <LoginTabs activeTab={activeTab} onTabChange={handleTabChange} />
+      <div className="rounded-2xl bg-[#A97449] p-8 w-full max-w-sm border-black border-2 relative">
         <div className="mt-6 space-y-4">
           {activeTab === "signup" && (
             <div className="flex flex-col gap-4">
@@ -165,14 +173,19 @@ export default function LoginPage() {
           <Button
             onClick={handleAuth}
             className="w-full rounded-xl bg-green-700 py-3 text-white font-semibold hover:bg-green-800 transition"
+            disabled={isSubmitting}
           >
-            {activeTab === "signin" ? "Entrar" : "Cadastrar"}
+            {isSubmitting
+              ? "Aguarde..."
+              : activeTab === "signin"
+              ? "Entrar"
+              : "Cadastrar"}
           </Button>
 
-          {/* Google Login */}
           <Button
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2 rounded-xl border border-white py-3 text-white hover:bg-white hover:text-[#5D3A1A] transition"
+            disabled={isSubmitting}
           >
             <FcGoogle className="text-xl" />
             Entrar com Google

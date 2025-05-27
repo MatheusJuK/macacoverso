@@ -8,7 +8,7 @@ interface LoginTabsProps {
 // ToDo: Refatorar para usar o componente de botão da Shadcn
 export function LoginTabs({ activeTab, onTabChange }: LoginTabsProps) {
   return (
-    <div className="mt-8 w-full max-w-[90%] sm:max-w-sm overflow-hidden rounded-md bg-[#A97449] p-1 shadow-inner absolute top-16 border-2 border-black">
+    <div className="mt-4 w-full max-w-[100%] sm:max-w-sm overflow-hidden rounded-md bg-[#A97449] p-1 shadow-inner border-2 border-black">
       <div className="relative flex">
         {/* Background para indicar que a tab está ativa */}
         <div

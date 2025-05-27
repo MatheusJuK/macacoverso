@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { auth, db } from "@/lib/firebaseClient";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { toast } from "sonner";
+import { Toaster } from "./ui/sonner";
 
 interface Props {
   macacoId: string;
@@ -63,7 +65,7 @@ export default function AdocaoSimbolicaModal({ macacoId, onAdotar }: Props) {
         throw new Error("Erro ao registrar adoção");
       }
 
-      alert("Obrigado pela sua adoção simbólica!");
+      toast.success("Adoção simbólica registrada com sucesso!");
       onAdotar(user ? user.displayName || nome : "");
       setOpen(false);
     } catch (err) {
@@ -73,44 +75,46 @@ export default function AdocaoSimbolicaModal({ macacoId, onAdotar }: Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          onClick={() => setOpen(true)}
-          variant="default"
-          className="bg-[#977036] hover:bg-[#866129] font-bold py-2 px-4 rounded"
-        >
-          Adotar simbolicamente
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Adoção Simbólica</DialogTitle>
-          <DialogDescription>
-            Preencha os dados para apadrinhar um dos nossos macacos resgatados
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            placeholder="Seu nome completo"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            required
-          />
-          <Input
-            type="email"
-            placeholder="Seu e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <DialogFooter>
-            <Button type="submit" className="w-full">
-              Confirmar Adoção
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button
+            onClick={() => setOpen(true)}
+            variant="default"
+            className="bg-[#977036] hover:bg-[#866129] font-bold py-2 px-4 rounded"
+          >
+            Adotar simbolicamente
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Adoção Simbólica</DialogTitle>
+            <DialogDescription>
+              Preencha os dados para apadrinhar um dos nossos macacos resgatados
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              placeholder="Seu nome completo"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
+            <Input
+              type="email"
+              placeholder="Seu e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <DialogFooter>
+              <Button type="submit" className="w-full">
+                Confirmar Adoção
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
