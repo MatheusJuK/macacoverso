@@ -41,8 +41,7 @@ export default function Contact() {
     }
   }, [user, fetchUserData]);
 
-  const webhookURL =
-    "https://discord.com/api/webhooks/1375618069484797964/IXSYXb-JLiEYHMeCE71O7JzBhLYQesZ7se7j7ZV7pexGEn30Y8UdL48LpRPaz1vtYjvm";
+  const webhookURL = process.env.WEBHOOK_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +62,9 @@ export default function Contact() {
           },
         ],
       };
+      if (!webhookURL) {
+        throw new Error("Webhook URL não configurado");
+      }
 
       const response = await fetch(webhookURL, {
         method: "POST",
