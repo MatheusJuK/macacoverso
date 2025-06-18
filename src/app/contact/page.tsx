@@ -41,7 +41,7 @@ export default function Contact() {
     }
   }, [user, fetchUserData]);
 
-  const webhookURL = process.env.WEBHOOK_URL;
+  const webhookURL = process.env.NEXT_PUBLIC_WEBHOOK_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

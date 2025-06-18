@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   if (!token && !isPublic) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
-  if (token && pathname === "/login") {
+  if (token && isPublic) {
     return NextResponse.redirect(new URL("/mission", req.url));
   }
 
